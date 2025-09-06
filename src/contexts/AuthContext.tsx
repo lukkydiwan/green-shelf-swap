@@ -1,16 +1,42 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import api from '../lib/axios';
 
-const AuthContext = createContext();
+interface User {
+  id: string;
+  username: string;
+  email: string;
+}
 
-const initialState = {
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+}
+
+interface AuthContextType extends AuthState {
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (username: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  logout: () => void;
+  updateUser: (userData: Partial<User>) => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const initialState: AuthState = {
   user: null,
   token: null,
   loading: true,
   isAuthenticated: false,
 };
 
-const authReducer = (state, action) => {
+type AuthAction =
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'LOGIN_SUCCESS'; payload: { user: User; token: string } }
+  | { type: 'LOGOUT' }
+  | { type: 'UPDATE_USER'; payload: Partial<User> };
+
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
@@ -40,7 +66,7 @@ const authReducer = (state, action) => {
   }
 };
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Check for existing auth on mount

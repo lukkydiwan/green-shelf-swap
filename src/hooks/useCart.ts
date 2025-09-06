@@ -18,7 +18,7 @@ export const useAddToCart = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ productId, quantity = 1 }) => {
+    mutationFn: async ({ productId, quantity = 1 }: { productId: string; quantity?: number }) => {
       const response = await api.post('/cart/items', { productId, quantity });
       return response.data;
     },
@@ -29,7 +29,7 @@ export const useAddToCart = () => {
         description: "Item added to your cart successfully.",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error",
         description: error.response?.data?.message || "Failed to add item to cart.",
@@ -44,7 +44,7 @@ export const useRemoveFromCart = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (itemId) => {
+    mutationFn: async (itemId: string) => {
       await api.delete(`/cart/items/${itemId}`);
     },
     onSuccess: () => {
@@ -54,7 +54,7 @@ export const useRemoveFromCart = () => {
         description: "Item removed from your cart.",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error",
         description: error.response?.data?.message || "Failed to remove item from cart.",
@@ -79,7 +79,7 @@ export const useClearCart = () => {
         description: "All items removed from your cart.",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error",
         description: error.response?.data?.message || "Failed to clear cart.",
@@ -106,7 +106,7 @@ export const useCheckout = () => {
         description: "Your order has been placed successfully.",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error",
         description: error.response?.data?.message || "Failed to process checkout.",

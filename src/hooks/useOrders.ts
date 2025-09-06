@@ -13,7 +13,7 @@ export const useOrders = () => {
 };
 
 // Get single order
-export const useOrder = (orderId) => {
+export const useOrder = (orderId: string) => {
   return useQuery({
     queryKey: ['order', orderId],
     queryFn: async () => {

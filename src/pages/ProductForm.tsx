@@ -108,8 +108,8 @@ const ProductForm = () => {
     };
 
     try {
-      if (isEditing) {
-        await updateProductMutation.mutateAsync({ productId: id, productData });
+      if (isEditing && id) {
+        await updateProductMutation.mutateAsync({ productId: id as string, productData });
         navigate('/me/listings');
       } else {
         await createProductMutation.mutateAsync(productData);
@@ -241,15 +241,17 @@ const ProductForm = () => {
                 <div className="border rounded-lg p-4">
                   <Label className="text-sm font-medium">Image Preview</Label>
                   <div className="mt-2 aspect-video max-w-xs overflow-hidden rounded-lg bg-muted">
-                    <img 
-                      src={formData.image} 
-                      alt="Product preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
+                  <img 
+                    src={formData.image} 
+                    alt="Product preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const nextSibling = target.nextSibling as HTMLElement;
+                      if (nextSibling) nextSibling.style.display = 'flex';
+                    }}
+                  />
                     <div className="w-full h-full hidden items-center justify-center text-sm text-muted-foreground">
                       Invalid image URL
                     </div>

@@ -7,7 +7,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { useAddToCart } from '../hooks/useCart';
 import { useDeleteProduct } from '../hooks/useProducts';
 
-const ProductCard = ({ product, showActions = false, onEdit, onDelete }) => {
+const ProductCard = ({ product, showActions = false, onEdit, onDelete }: {
+  product: any;
+  showActions?: boolean;
+  onEdit?: (product: any) => void;
+  onDelete?: (product: any) => void;
+}) => {
   const { user, isAuthenticated } = useAuth();
   const addToCartMutation = useAddToCart();
   const deleteProductMutation = useDeleteProduct();
