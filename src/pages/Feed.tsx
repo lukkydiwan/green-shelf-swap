@@ -91,7 +91,6 @@ const Feed = () => {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
                 {mockCategories.map((category) => (
                   <SelectItem key={category.value} value={category.value}>
                     {category.label}
